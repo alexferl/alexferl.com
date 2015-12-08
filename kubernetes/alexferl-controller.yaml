@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: alexferl
+  labels:
+    app: alexferl
+    tier: frontend
+spec:
+  replicas: 3
+  selector:
+    app: alexferl
+    tier: frontend
+  template:
+    metadata:
+      labels:
+        app: alexferl
+        tier: frontend
+    spec:
+      containers:
+      - name: alexferl
+        image: gcr.io/kube-1153/alexferl:latest
+        ports:
+        - containerPort: 80
+        - containerPort: 443

@@ -1,0 +1,8 @@
+http://alexferl.com {
+    gzip
+}
+
+http://www.alexferl.com {
+    redir http://alexferl.com
+}
+

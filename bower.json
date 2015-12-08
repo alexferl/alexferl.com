@@ -1,16 +1,16 @@
 {
   "name": "alexferl.com",
-  "version": "0.0.0",
-  "homepage": "https://github.com/admiralobvious/alexferl.com",
+  "version": "0.1.0",
+  "homepage": "https://alexferl.com",
   "authors": [
-    "admiralobvious <aferlandqc@gmail.com>"
+    "Alexandre Ferland <aferlandqc@gmail.com>"
   ],
-  "license": "MIT",
   "ignore": [
     "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ]
+    "bower_components"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.6",
+    "font-awesome": "fontawesome#~4.5.0"
+  }
 }
