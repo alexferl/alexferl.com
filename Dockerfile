@@ -11,9 +11,11 @@ RUN npm install --silent bower -g
 
 WORKDIR /app/
 
-COPY Caddyfile bower.json index.html ./
+COPY bower.json ./
 
 RUN bower --silent install --allow-root
+
+COPY Caddyfile index.html ./
 
 CMD caddy -log stdout -agree -email aferlandqc@gmail.com
 
