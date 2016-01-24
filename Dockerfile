@@ -15,7 +15,9 @@ COPY bower.json ./
 
 RUN bower --silent install --allow-root
 
-COPY Caddyfile index.html ./
+COPY Caddyfile Caddyfile.common index.html ./
 
-CMD caddy -log stdout -agree -email aferlandqc@gmail.com
+COPY tls/alexferl.com.chain.crt tls/alexferl.com.key ./tls/
+
+CMD caddy -log stdout
 

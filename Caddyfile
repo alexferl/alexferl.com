@@ -1,8 +1,9 @@
-http://alexferl.com {
-    gzip
+https://alexferl.com {
+    import Caddyfile.common
 }
 
-http://www.alexferl.com {
-    redir http://alexferl.com
+http://alexferl.com, http://www.alexferl.com, https://www.alexferl.com {
+    import Caddyfile.common
+    redir https://alexferl.com
 }
 
