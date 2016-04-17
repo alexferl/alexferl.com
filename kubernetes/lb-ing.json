@@ -1,0 +1,44 @@
+{
+  "kind": "Ingress",
+  "apiVersion": "extensions/v1beta1",
+  "metadata": {
+    "name": "lb"
+  },
+  "spec": {
+    "tls": [
+      {
+        "secretName": "alexferl-secret"
+      }
+    ],
+    "rules": [
+      {
+        "host": "alexferl.com",
+        "http": {
+          "paths": [
+            {
+              "path": "/*",
+              "backend": {
+                "serviceName": "alexferl",
+                "servicePort": 2015
+              }
+            }
+          ]
+        }
+      },
+      {
+        "host": "www.alexferl.com",
+        "http": {
+          "paths": [
+            {
+              "path": "/*",
+              "backend": {
+                "serviceName": "alexferl",
+                "servicePort": 2015
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

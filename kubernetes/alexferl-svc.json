@@ -1,29 +1,23 @@
 {
-   "kind":"Service",
-   "apiVersion":"v1",
-   "metadata":{
-      "name":"alexferl",
-      "labels":{
-         "app":"alexferl"
+  "kind": "Service",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "alexferl",
+    "labels": {
+      "app": "alexferl"
+    }
+  },
+  "spec": {
+    "type": "NodePort",
+    "ports": [
+      {
+        "name": "http-server",
+        "port": 2015,
+        "targetPort": 2015
       }
-   },
-   "spec":{
-      "ports": [
-         {
-           "name": "http-server",
-           "port":80,
-           "targetPort":80
-         },
-         {
-           "name": "https-server",
-           "port":443,
-           "targetPort":443
-         }
-      ],
-      "selector":{
-         "app":"alexferl"
-      },
-      "type": "LoadBalancer",
-      "loadBalancerIP": "104.196.35.65"
-   }
+    ],
+    "selector": {
+      "app": "alexferl"
+    }
+  }
 }

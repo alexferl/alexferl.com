@@ -1,6 +1,0 @@
-errors stderr
-log / stdout "{remote} - [{when}] {method} {uri} {proto} {status} {size} {>Referer} {>User-Agent}"
-tls tls/alexferl.com.chain.crt tls/alexferl.com.key
-gzip {
-    level 1
-}

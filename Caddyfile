@@ -1,9 +1,8 @@
-https://alexferl.com {
-    import Caddyfile.common
+:2015 {
+    errors stderr
+    log / stdout "{remote} - [{when}] {method} {uri} {proto} {status} {size} {>Referer} {>User-Agent}"
+    header / Strict-Transport-Security "max-age=31536000"
+    gzip {
+        level 1
+    }
 }
-
-http://alexferl.com, http://www.alexferl.com, https://www.alexferl.com {
-    import Caddyfile.common
-    redir https://alexferl.com
-}
-
