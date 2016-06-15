@@ -2,6 +2,7 @@
     errors stderr
     log / stdout "{remote} - [{when}] {method} {uri} {proto} {status} {size} {>Referer} {>User-Agent}"
     header / Strict-Transport-Security "max-age=31536000"
+    header / Cache-Control "max-age=31536000"
     gzip {
         level 1
     }
