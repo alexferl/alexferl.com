@@ -1,6 +1,6 @@
 {
-  "kind": "ReplicationController",
-  "apiVersion": "v1",
+  "kind": "Deployment",
+  "apiVersion": "extensions/v1beta1",
   "metadata": {
     "name": "alexferl",
     "labels": {
@@ -9,9 +9,6 @@
   },
   "spec": {
     "replicas": 3,
-    "selector": {
-      "app": "alexferl"
-    },
     "template": {
       "metadata": {
         "labels": {
@@ -23,11 +20,17 @@
           {
             "name": "alexferl",
             "image": "gcr.io/kube-1153/alexferl:latest",
+            "imagePullPolicy": "Always",
             "ports": [
               {
                 "containerPort": 2015
               }
-            ]
+            ],
+            "resources": {
+              "limits": {
+                "cpu": "100m"
+              }
+            }
           }
         ]
       }
