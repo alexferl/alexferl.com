@@ -28,7 +28,7 @@
             ],
             "resources": {
               "limits": {
-                "cpu": "100m"
+                "cpu": "0.1"
               }
             }
           }
