@@ -10,7 +10,7 @@
   "spec": {
     "tls": [
       {
-        "secretName": "alexferl-secret"
+        "secretName": "alexferl.com-cert"
       }
     ],
     "rules": [
