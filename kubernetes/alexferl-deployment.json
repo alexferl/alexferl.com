@@ -8,7 +8,7 @@
     }
   },
   "spec": {
-    "replicas": 3,
+    "replicas": 2,
     "template": {
       "metadata": {
         "labels": {
@@ -21,6 +21,12 @@
             "name": "alexferl",
             "image": "gcr.io/kube-1153/alexferl:latest",
             "imagePullPolicy": "Always",
+            "env": [
+              {
+                "name": "GCE_PROJECT",
+                "value": "kube-1153"
+              }
+            ],
             "ports": [
               {
                 "containerPort": 2015
@@ -28,7 +34,7 @@
             ],
             "resources": {
               "limits": {
-                "cpu": "0.1"
+                "cpu": "100m"
               }
             }
           }

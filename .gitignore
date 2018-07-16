@@ -1,3 +1,4 @@
 .idea
 Caddyfile
-kubernetes/alexferl-secret.json
+alexferl.key
+alexferl.csr
