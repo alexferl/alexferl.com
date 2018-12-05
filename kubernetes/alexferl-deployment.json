@@ -26,6 +26,12 @@
                 "containerPort": 2015
               }
             ],
+            "env": [
+              {
+                "name": "WEBHOOK_SECRET",
+                "value": "secret"
+              }
+            ],
             "resources": {
               "limits": {
                 "cpu": "100m"
