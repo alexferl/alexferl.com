@@ -6,11 +6,9 @@ ARG plugins="git"
 RUN VERSION=${version} PLUGINS=${plugins} /bin/sh /usr/bin/builder.sh
 
 FROM alpine:3.7
-LABEL maintainer "Alexandre Ferland <aferlandqc@gmail.com>"
+MAINTAINER "Alexandre Ferland <aferlandqc@gmail.com>"
 
-RUN apk add --no-cache ca-certificates \
-    git && \
-    update-ca-certificates
+RUN apk add --no-cache git
 
 LABEL caddy_version="0.11.0"
 
