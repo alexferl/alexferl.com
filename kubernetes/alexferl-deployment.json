@@ -8,7 +8,7 @@
     }
   },
   "spec": {
-    "replicas": 2,
+    "replicas": 1,
     "template": {
       "metadata": {
         "labels": {
@@ -21,12 +21,6 @@
             "name": "alexferl",
             "image": "gcr.io/kube-1153/alexferl:latest",
             "imagePullPolicy": "Always",
-            "env": [
-              {
-                "name": "GCE_PROJECT",
-                "value": "kube-1153"
-              }
-            ],
             "ports": [
               {
                 "containerPort": 2015
