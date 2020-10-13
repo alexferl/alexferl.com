@@ -1,9 +1,0 @@
-:2015 {
-    errors stderr
-    log / stdout "{remote} - [{when}] {method} {uri} {proto} {status} {size} {>Referer} {>User-Agent}"
-    tls off
-
-    git https://github.com/admiralobvious/alexferl.com {
-        hook /webhook {%WEBHOOK_SECRET%}
-    }
-}

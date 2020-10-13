@@ -1,29 +1,15 @@
-FROM abiosoft/caddy:builder as builder
+ARG NGINX_VERSION=1.19.3-alpine
 
-ARG version="0.11.0"
-ARG plugins="git"
+FROM nginxinc/nginx-unprivileged:${NGINX_VERSION}
 
-RUN VERSION=${version} PLUGINS=${plugins} /bin/sh /usr/bin/builder.sh
+COPY index.html /usr/share/nginx/html
 
-FROM alpine:3.7
-MAINTAINER "Alexandre Ferland <aferlandqc@gmail.com>"
+USER root
 
-RUN apk add --no-cache git
+RUN rm /etc/nginx/conf.d/default.conf
+COPY nginx/nginx.conf /etc/nginx/
+COPY nginx/alexferl.com.conf /etc/nginx/conf.d/
+RUN mkdir -p /etc/nginx/headers.d
+COPY nginx/headers.conf /etc/nginx/headers.d/
 
-LABEL caddy_version="0.11.0"
-
-# install caddy
-COPY --from=builder /install/caddy /usr/bin/caddy
-
-# validate install
-RUN /usr/bin/caddy -version
-RUN /usr/bin/caddy -plugins
-
-COPY Caddyfile /etc/Caddyfile
-
-WORKDIR /srv
-
-EXPOSE 2015
-
-ENTRYPOINT ["/usr/bin/caddy"]
-CMD ["--conf", "/etc/Caddyfile", "--log", "stdout"]
+USER nginx
