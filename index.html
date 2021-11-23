@@ -1,42 +1,97 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>alexferl.com</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
-  <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP+EABIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAA=="/>
-  <style type="text/css">
-    body { font-family: Ubuntu, sans-serif; font-size: 14px; }
-    a { color: #00b3ee; }
-  </style>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>alexferl.com</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css" integrity="sha384-Uu6IeWbM+gzNVXJcM9XV3SohHtmWE+3VGi496jvgX1jyvDTXfdK+rfZc8C1Aehk5" crossorigin="anonymous">
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP+EABIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAA=="/>
+    <style>
+        * {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        #layout {
+            position: relative;
+            left: 0;
+            padding-left: 0;
+        }
+        .content {
+            padding: 0 2em;
+            max-width: 800px;
+            margin: 0 auto 50px;
+            line-height: 1.6em;
+        }
+
+        .header {
+            margin: 0;
+            color: #333;
+            text-align: center;
+            padding: 1em 2em 0;
+        }
+        .header h1 {
+            margin: 0.2em 0;
+            font-size: 3em;
+            font-weight: 300;
+        }
+
+        .content-subhead {
+            margin: 50px 0 20px 0;
+            font-weight: 300;
+        }
+
+        .pure-menu-link {
+            display: inline;
+        }
+
+        .footer {
+            padding: 1em 0;
+            text-align: center;
+        }
+        .footer a {
+            color: #ccc;
+            font-size: 80%;
+        }
+        .footer .pure-menu a:hover,
+        .footer .pure-menu a:focus {
+            background: none;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-  <div class="row">
-    <div class="col-md-8 offset-md-2">
-      <div class="page-header">
-        <h1>alexandre ferland</h1>
-      </div>
-      <p>
-        I am a System Developer. I used to be a Linux System Administrator. I like Go, Linux, Python, open-source software, cloud computing and DevOps.
-      </p>
-      <h4>Things I made</h4>
-      <dl class="row">
-        <dt class="col-md-3"><a href="https://flask-mysqldb.readthedocs.org/en/latest/" target="_blank">Flask-MySQLdb</a></dt>
-        <dd class="col-md-9">MySQL extension for the Flask web framework.</dd>
-        <dt class="col-md-3"><a href="https://flask-simpleldap.readthedocs.org/en/latest/" target="_blank">Flask-SimpleLDAP</a></dt>
-        <dd class="col-md-9">LDAP authentication extension for the Flask web framework.</dd>
-        <dt class="col-md-3"><a href="https://github.com/admiralobvious/tinysyslog" target="_blank">tinysyslog</a></dt>
-        <dd class="col-md-9">A tiny and simple syslog server with log rotation written in Go.</dd>
-        <dt class="col-md-3"><a href="https://github.com/admiralobvious/vyper" target="_blank">vyper</a></dt>
-        <dd class="col-md-9">Python configuration with (more) fangs.</dd>
-      </dl>
-      <p>
-        <a href="https://github.com/alexferl" target="_blank"><i class="fab fa-github fa-2x"></i></a> <a href="https://www.linkedin.com/in/alexferl" target="_blank"><i class="fab fa-linkedin fa-2x"></i></a> <a href="mailto:aferlandqc@gmail.com"><i class="fas fa-envelope-square fa-2x"></i></a>
-      </p>
-    </div><!--col-md-8 offset-md-2-->
-  </div><!--row-->
-</div><!--container-->
+<div id="layout">
+    <div id="main">
+        <div class="header">
+            <h1>alexandre ferland</h1>
+        </div>
+
+        <div class="content">
+            <p>
+                I am a Software Developer. I used to be a Linux System Administrator. I like Go, Linux, Python, open-source software, cloud computing and DevOps.
+            </p>
+
+            <h2 class="content-subhead">Things I made</h2>
+            <div class="pure-menu custom-restricted-width">
+                <ul class="pure-menu-list">
+                    <li class="pure-menu-item"><a href="https://flask-mysqldb.readthedocs.org/en/latest/" class="pure-menu-link" target="_blank">Flask-MySQLdb</a>MySQL extension for the Flask web framework.</li>
+                    <li class="pure-menu-item"><a href="https://flask-simpleldap.readthedocs.org/en/latest/" class="pure-menu-link" target="_blank">Flask-SimpleLDAP</a>LDAP authentication extension for the Flask web framework.</li>
+                    <li class="pure-menu-item"><a href="https://github.com/alexferl/tinysyslog" class="pure-menu-link" target="_blank">tinysyslog</a>A tiny and simple syslog server with log rotation written in Go.</li>
+                    <li class="pure-menu-item"><a href="https://github.com/alexferl/vyper" class="pure-menu-link" target="_blank">vyper</a>Python configuration with (more) fangs.</li>
+                </ul>
+            </div>
+
+            <div class="footer">
+                <div class="pure-menu pure-menu-horizontal">
+                    <ul>
+                        <li class="pure-menu-item"><a href="mailto:me@alexferl.com" class="pure-menu-link" target="_blank">Email</a></li>
+                        <li class="pure-menu-item"><a href="http://github.com/alexferl" class="pure-menu-link" target="_blank">GitHub</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
