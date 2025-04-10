@@ -30,7 +30,7 @@ export function Skills() {
 			<Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
 				{Object.entries(skills).map(([category, items]) => (
 					<Box key={category}>
-						<Typography variant="h6" gutterBottom>
+						<Typography variant="h5" gutterBottom>
 							{category}
 						</Typography>
 						<Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>

@@ -34,16 +34,18 @@ export function Header() {
 								color="inherit"
 								href="mailto:me@alexferl.com"
 								target="_blank"
+								aria-label="Email Alexandre Ferland"
 							>
-								<EmailIcon />
+								<EmailIcon aria-hidden="true" />
 							</IconButton>
 							<IconButton
 								size="large"
 								color="inherit"
 								href="https://github.com/alexferl"
 								target="_blank"
+								aria-label="Visit Alexandre Ferland's GitHub profile"
 							>
-								<GitHubIcon />
+								<GitHubIcon aria-hidden="true" />
 							</IconButton>
 							<IconButton
 								size="large"
@@ -51,8 +53,9 @@ export function Header() {
 								edge="end"
 								href="https://www.linkedin.com/in/alexferl/"
 								target="_blank"
+								aria-label="Visit Alexandre Ferland's LinkedIn profile"
 							>
-								<LinkedInIcon />
+								<LinkedInIcon aria-hidden="true" />
 							</IconButton>
 						</Box>
 					</Box>
