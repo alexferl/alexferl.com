@@ -23,7 +23,9 @@ dist-ssr
 *.sw?
 
 # Docker specific
+.dockerignore
 .editorconfig
 .git
 .gitignore
+Dockerfile
 README.md
