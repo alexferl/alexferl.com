@@ -1,5 +1,5 @@
 alexferl.com {
-    redir https://www.alexferl.com{uri} 301
+	redir https://www.alexferl.com{uri} 301
 }
 
 www.alexferl.com {
