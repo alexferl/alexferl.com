@@ -1,5 +1,5 @@
 alexferl.com www.alexferl.com {
-	root * /usr/share/caddy/html
+	root * /usr/share/caddy
 
 	@healthcheck path /healthz
 	respond @healthcheck "OK" 200
