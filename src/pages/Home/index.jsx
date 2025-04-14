@@ -1,8 +1,8 @@
 import { Box } from "@mui/material"
 
-import { AboutMe } from "../../components/AboutMe.jsx"
-import { Projects } from "../../components/Projects.jsx"
-import { Skills } from "../../components/Skills.jsx"
+import { AboutMe } from "@/src/components/AboutMe.jsx"
+import { Projects } from "@/src/components/Projects.jsx"
+import { Skills } from "@/src/components/Skills.jsx"
 
 export function Home() {
 	return (
