@@ -12,8 +12,7 @@ import (
 //go:embed public
 var files embed.FS
 
-const csp = "default-src 'self'; script-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; frame-ancestors 'self'; form-action 'self';"
-
+var csp = "default-src 'self'; script-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; frame-ancestors 'self'; form-action 'self';"
 var hosts = []string{"alexferl.com", "www.alexferl.com"}
 
 func main() {
@@ -28,6 +27,10 @@ func main() {
 		config.WithAutocertManager(manager),
 		config.WithSecurityHeadersOptions(
 			config.WithSecurityHeadersCSP(csp),
+			config.WithSecurityHeadersHSTS(
+				config.WithHSTSPreload(true),
+				config.WithHSTSMaxAge(31536000),
+			),
 		),
 	)
 
