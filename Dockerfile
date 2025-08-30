@@ -1,22 +1,27 @@
-# Build stage
-FROM node:lts-alpine AS builder
-WORKDIR /app
-COPY package*.json .
-RUN npm install
+FROM golang:1.25-alpine AS builder
+
+WORKDIR /build
+
+RUN apk add --no-cache git
+RUN adduser -D -u 1337 zerohttp
+
+COPY go.mod go.sum ./
+RUN go mod download
+
 COPY . .
-RUN npm run build
 
-# Production stage with Caddy
-FROM caddy:2.9.1-alpine
+ARG GOOS=linux
+ARG GOARCH=amd64
 
-RUN addgroup -g 1337 -S caddy && \
-    adduser -u 1337 -S caddy -G caddy
+ENV GOOS=$GOOS
+ENV GOARCH=$GOARCH
 
-RUN chown -R caddy:caddy /usr/share/caddy /config /data
+RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o zerohttp ./main.go
 
-COPY --from=builder --chown=caddy:caddy /app/dist /usr/share/caddy
-COPY --chown=caddy:caddy etc/caddy/Caddyfile /etc/caddy/Caddyfile
+FROM scratch
+COPY --from=builder /etc/passwd /etc/passwd
+COPY --from=builder /build/zerohttp /zerohttp
 
-USER caddy
+USER zerohttp
 
-EXPOSE 80 443
+ENTRYPOINT ["/zerohttp"]
