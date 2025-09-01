@@ -3,23 +3,30 @@ package main
 import (
 	"embed"
 	"log"
+	"net/http"
 
 	zh "github.com/alexferl/zerohttp"
 	"github.com/alexferl/zerohttp/config"
 	"github.com/alexferl/zerohttp/middleware"
 )
 
+//go:embed templates/*.html
+var templatesFS embed.FS
+
 //go:embed public
-var files embed.FS
+var staticFiles embed.FS
 
 var csp = "default-src 'self'; script-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; frame-ancestors 'self'; form-action 'self';"
 var hosts = []string{"alexferl.com", "www.alexferl.com"}
 
+type PageData struct {
+	Title       string
+	Description string
+}
+
 func main() {
-	manager := zh.NewAutocertManager(
-		"/var/cache/certs",
-		hosts...,
-	)
+	manager := zh.NewAutocertManager("/var/cache/certs", hosts...)
+	tm := zh.NewTemplateManager(templatesFS, "templates/*.html")
 
 	app := zh.New(
 		config.WithAddr(":80"),
@@ -36,7 +43,24 @@ func main() {
 
 	app.Use(middleware.Compress())
 
-	app.Static(files, "public")
+	app.Files("/public/", staticFiles, "public")
+
+	app.GET("/", zh.HandlerFunc(func(w http.ResponseWriter, r *http.Request) error {
+		data := PageData{
+			Title:       "Home",
+			Description: "Experienced IT professional with 15+ years in software development, DevOps, system administration, and quality assurance.",
+		}
+		return tm.Render(w, http.StatusOK, "index.html", data)
+	}))
+
+	app.NotFound(zh.HandlerFunc(func(w http.ResponseWriter, r *http.Request) error {
+		log.Printf("404 handler called for: %s", r.URL.Path) // Add this line
+		data := PageData{
+			Title:       "404 - Page Not Found",
+			Description: "The page you're looking for could not be found.",
+		}
+		return tm.Render(w, http.StatusNotFound, "404.html", data)
+	}))
 
 	log.Fatal(app.StartAutoTLS(hosts...))
 }
