@@ -1,5 +1,3 @@
-github.com/alexferl/zerohttp v0.2.0 h1:2r88dLdqeeQxZeB6HteLOY6X2TH1VFgYIbqNsuqvG+8=
-github.com/alexferl/zerohttp v0.2.0/go.mod h1:iSj8StfN6avuGqA7L8tw5une+NlJl2JM/542ozcgPoc=
 github.com/alexferl/zerohttp v0.3.0 h1:mnhsbYz/86+iqrBCa9evfif1Xx0v/xBl900SMijzPes=
 github.com/alexferl/zerohttp v0.3.0/go.mod h1:iSj8StfN6avuGqA7L8tw5une+NlJl2JM/542ozcgPoc=
 golang.org/x/crypto v0.41.0 h1:WKYxWedPGCTVVl5+WHSSrOBT0O8lx32+zxmHxijgXp4=

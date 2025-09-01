@@ -2,6 +2,7 @@ package main
 
 import (
 	"embed"
+	"flag"
 	"log"
 	"net/http"
 
@@ -25,21 +26,35 @@ type PageData struct {
 }
 
 func main() {
+	local := flag.Bool("local", false, "run locally without TLS on :8080")
+	flag.Parse()
+
 	manager := zh.NewAutocertManager("/var/cache/certs", hosts...)
 	tm := zh.NewTemplateManager(templatesFS, "templates/*.html")
 
-	app := zh.New(
-		config.WithAddr(":80"),
-		config.WithTLSAddr(":443"),
-		config.WithAutocertManager(manager),
-		config.WithSecurityHeadersOptions(
-			config.WithSecurityHeadersCSP(csp),
-			config.WithSecurityHeadersHSTS(
-				config.WithHSTSPreload(true),
-				config.WithHSTSMaxAge(31536000),
+	var app *zh.Server
+
+	if *local {
+		app = zh.New(
+			config.WithAddr("localhost:8080"),
+			config.WithSecurityHeadersOptions(
+				config.WithSecurityHeadersCSP(csp),
 			),
-		),
-	)
+		)
+	} else {
+		app = zh.New(
+			config.WithAddr(":80"),
+			config.WithTLSAddr(":443"),
+			config.WithAutocertManager(manager),
+			config.WithSecurityHeadersOptions(
+				config.WithSecurityHeadersCSP(csp),
+				config.WithSecurityHeadersHSTS(
+					config.WithHSTSPreload(true),
+					config.WithHSTSMaxAge(31536000),
+				),
+			),
+		)
+	}
 
 	app.Use(middleware.Compress())
 
@@ -54,7 +69,7 @@ func main() {
 	}))
 
 	app.NotFound(zh.HandlerFunc(func(w http.ResponseWriter, r *http.Request) error {
-		log.Printf("404 handler called for: %s", r.URL.Path) // Add this line
+		log.Printf("404 handler called for: %s", r.URL.Path)
 		data := PageData{
 			Title:       "404 - Page Not Found",
 			Description: "The page you're looking for could not be found.",
@@ -62,5 +77,9 @@ func main() {
 		return tm.Render(w, http.StatusNotFound, "404.html", data)
 	}))
 
-	log.Fatal(app.StartAutoTLS(hosts...))
+	if *local {
+		log.Fatal(app.Start())
+	} else {
+		log.Fatal(app.StartAutoTLS(hosts...))
+	}
 }
