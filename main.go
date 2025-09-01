@@ -69,7 +69,6 @@ func main() {
 	}))
 
 	app.NotFound(zh.HandlerFunc(func(w http.ResponseWriter, r *http.Request) error {
-		log.Printf("404 handler called for: %s", r.URL.Path)
 		data := PageData{
 			Title:       "404 - Page Not Found",
 			Description: "The page you're looking for could not be found.",
