@@ -11,3 +11,15 @@
 .navbar-menu {
   display: flex;
 }
+
+.box, .card {
+  border: 1px solid #666666;
+}
+
+.navbar {
+  border-bottom: 1px solid #666666;
+}
+
+.bx {
+  font-size: 1.25rem;
+}
