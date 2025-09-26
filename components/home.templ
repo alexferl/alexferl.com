@@ -1,0 +1,184 @@
+package components
+
+import (
+	"github.com/alexferl/templaui/columns"
+	"github.com/alexferl/templaui/components/card"
+	"github.com/alexferl/templaui/elements/box"
+	"github.com/alexferl/templaui/elements/content"
+	"github.com/alexferl/templaui/elements/div"
+	"github.com/alexferl/templaui/elements/icon"
+	"github.com/alexferl/templaui/elements/paragraph"
+	"github.com/alexferl/templaui/elements/tag"
+	"github.com/alexferl/templaui/elements/title"
+	"github.com/alexferl/templaui/helpers"
+	"github.com/alexferl/templaui/layout/container"
+	"github.com/alexferl/templaui/layout/section"
+)
+
+templ HomePage() {
+	@BasePage(PageProps{
+		Title:       "Home | Alexandre Ferland",
+		Description: "Experienced IT professional with 15+ years in software development, DevOps, system administration, and quality assurance.",
+	}, MainContent())
+}
+
+templ MainContent() {
+	@container.Container(container.ContainerProps{
+		Responsive: container.IsMaxDesktop,
+	}) {
+		@section.Section() {
+			@AboutSection()
+			@SkillsSection()
+			@ProjectsSection()
+		}
+	}
+}
+
+templ AboutSection() {
+	@box.Box(box.BoxProps{
+		Class: []string{string(helpers.IsShadowless)},
+	}) {
+		@title.Title(title.TitleProps{Size: title.Is4}) {
+			About Me
+		}
+		@content.Content() {
+			@paragraph.Paragraph(paragraph.ParagraphProps{Size: paragraph.IsSize5}) {
+				With over 15 years of experience in IT, I've built a strong technical foundation across
+				software development, DevOps, system administration, and quality assurance. I work with
+				languages like Go, Python, and JavaScript and maintain a strong interest in open-source software,
+				Linux, cloud computing, and infrastructure-as-code tools. These days, I focus on
+				consulting, helping businesses solve complex problems and deliver practical, efficient
+				solutions that make an impact.
+			}
+		}
+	}
+}
+
+templ SkillsSection() {
+	@box.Box(box.BoxProps{
+		Class: []string{string(helpers.IsShadowless)},
+	}) {
+		@title.Title(title.TitleProps{Size: title.Is4}) {
+			Skills
+		}
+		@SkillCategory("Programming Languages", []SkillTag{
+			{"Go", tag.IsPrimary},
+			{"Python", tag.IsPrimary},
+			{"JavaScript", tag.IsPrimary},
+			{"Shell Scripting", tag.IsPrimary},
+		})
+		@SkillCategory("Backend Development", []SkillTag{
+			{"REST APIs", tag.IsInfo},
+			{"Microservices", tag.IsInfo},
+			{"gRPC", tag.IsInfo},
+		})
+		@SkillCategory("DevOps Tools", []SkillTag{
+			{"Docker", tag.IsSuccess},
+			{"Kubernetes", tag.IsSuccess},
+			{"Pulumi", tag.IsSuccess},
+			{"CI/CD Pipelines", tag.IsSuccess},
+			{"Prometheus/Grafana", tag.IsSuccess},
+		})
+		@SkillCategory("Cloud Platforms", []SkillTag{
+			{"GCP", tag.IsWarning},
+			{"Linode", tag.IsWarning},
+			{"OCI", tag.IsWarning},
+		})
+		@SkillCategory("Databases & Search Technologies", []SkillTag{
+			{"MongoDB", tag.IsDanger},
+			{"Redis", tag.IsDanger},
+			{"Elasticsearch", tag.IsDanger},
+			{"SQL", tag.IsDanger},
+		})
+		@SkillCategory("Security Fundamentals", []SkillTag{
+			{"Access Management", tag.IsLink},
+			{"Encryption", tag.IsLink},
+			{"Least Privilege", tag.IsLink},
+			{"Secure Software Development", tag.IsLink},
+		})
+		@SkillCategory("Other Skills", []SkillTag{
+			{"Linux", tag.IsDark},
+			{"Networking Fundamentals", tag.IsDark},
+			{"Version Control (Git)", tag.IsDark},
+		})
+	}
+}
+
+type SkillTag struct {
+	Name  string
+	Color tag.Color
+}
+
+templ SkillCategory(categoryName string, skills []SkillTag) {
+	@div.Div(div.DivProps{Class: []string{string(helpers.MB5)}}) {
+		@title.Title(title.TitleProps{
+			Size:  title.Is5,
+			Class: []string{string(helpers.MB3)},
+		}) {
+			{ categoryName }
+		}
+		@tag.Tags() {
+			for _, skill := range skills {
+				@tag.Tag(tag.TagProps{
+					Size:  tag.IsMedium,
+					Color: skill.Color,
+				}) {
+					{ skill.Name }
+				}
+			}
+		}
+	}
+}
+
+templ ProjectsSection() {
+	@box.Box(box.BoxProps{
+		Class: []string{string(helpers.IsShadowless)},
+	}) {
+		@title.Title(title.TitleProps{Size: title.Is4}) {
+			Projects
+		}
+		@columns.Columns(columns.ColumnsProps{
+			IsMultiline: true,
+		}) {
+			@ProjectCard("tinysyslog", "A tiny and simple syslog server with log rotation written in Go.", "https://github.com/alexferl/tinysyslog")
+			@ProjectCard("vyper", "Python configuration with (more) fangs.", "https://github.com/alexferl/vyper")
+			@ProjectCard("zerohttp", "Zero complexity, secure by default HTTP framework for Go.", "https://github.com/alexferl/zerohttp")
+		}
+	}
+}
+
+templ ProjectCard(name, description, githubURL string) {
+	@columns.Column(columns.ColumnProps{
+		SizeDesktop: columns.Size4,
+		SizeTablet:  columns.Size6,
+		SizeMobile:  columns.Size12,
+	}) {
+		@card.Card(card.CardProps{
+			Class: []string{"project-card", string(helpers.IsShadowless)},
+		}) {
+			@card.CardContent() {
+				@title.Title(title.TitleProps{Size: title.Is6}) {
+					{ name }
+				}
+				@paragraph.Paragraph(paragraph.ParagraphProps{Class: []string{"subtitle", string(helpers.IsSize7)}}) {
+					{ description }
+				}
+			}
+			@card.CardFooter() {
+				@card.CardFooterItem(card.CardFooterItemProps{
+					Class: []string{string(helpers.HasTextPrimary)},
+					Attributes: templ.Attributes{
+						"href":   githubURL,
+						"target": "_blank",
+						"rel":    "noopener noreferrer",
+					},
+				}) {
+					@icon.Icon() {
+						<i class="bx bxl-github"></i>
+					}
+					<span>View on GitHub</span>
+				}
+			}
+		}
+	}
+}

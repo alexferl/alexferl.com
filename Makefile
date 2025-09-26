@@ -1,9 +1,11 @@
-.PHONY: dev fmt lint pre-commit run tidy update-deps
+.PHONY: dev audit fmt lint pre-commit run tidy update-deps
 
 .DEFAULT: help
 help:
 	@echo "make dev"
 	@echo "	setup development environment"
+	@echo "make audit"
+	@echo "	conduct quality checks"
 	@echo "make fmt"
 	@echo "	fix code format issues"
 	@echo "make lint"
@@ -26,6 +28,10 @@ endif
 
 dev: check-pre-commit
 	pre-commit install
+
+audit:
+	go mod verify
+	go run golang.org/x/vuln/cmd/govulncheck@latest ./...
 
 fmt:
 	$(GOLANGCI_LINT) fmt

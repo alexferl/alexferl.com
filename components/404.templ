@@ -1,0 +1,79 @@
+package components
+
+import (
+	"github.com/alexferl/templaui/elements/box"
+	"github.com/alexferl/templaui/elements/button"
+	"github.com/alexferl/templaui/elements/content"
+	"github.com/alexferl/templaui/elements/div"
+	"github.com/alexferl/templaui/elements/icon"
+	"github.com/alexferl/templaui/elements/paragraph"
+	"github.com/alexferl/templaui/elements/title"
+	"github.com/alexferl/templaui/helpers"
+	"github.com/alexferl/templaui/layout/container"
+	"github.com/alexferl/templaui/layout/section"
+)
+
+templ NotFoundPage() {
+	@BasePage(PageProps{
+		Title:       "Page Not Found | Alexandre Ferland",
+		Description: "The page you're looking for could not be found.",
+	}, NotFoundContent())
+}
+
+templ NotFoundContent() {
+	@container.Container(container.ContainerProps{
+		Responsive: container.IsMaxDesktop,
+	}) {
+		@section.Section() {
+			@div.Div(div.DivProps{Class: []string{string(helpers.HasTextCentered)}}) {
+				@box.Box(box.BoxProps{
+					Class: []string{string(helpers.IsShadowless)},
+				}) {
+					@content.Content() {
+						// Apply styling directly to the <i> element
+						<i
+							class={ "bx", "bx-error", string(helpers.HasTextWarning) }
+							style="font-size: 4rem; margin-bottom: 1rem;"
+						></i>
+						@title.Title(title.TitleProps{
+							Size:  title.Is1,
+							Class: []string{string(helpers.HasTextPrimary)},
+						}) {
+							404
+						}
+						@title.Subtitle(title.SubtitleProps{
+							Size: title.Is3,
+						}) {
+							Page Not Found
+						}
+						@paragraph.Paragraph(paragraph.ParagraphProps{
+							Size:  paragraph.IsSize5,
+							Class: []string{string(helpers.MB5)},
+						}) {
+							Oops! We couldn't find that page. It might have been moved or deleted.
+						}
+						@NotFoundButtons()
+					}
+				}
+			}
+		}
+	}
+}
+
+templ NotFoundButtons() {
+	@button.Buttons(button.ButtonsProps{Alignment: button.IsCentered}) {
+		@button.Button(button.ButtonProps{
+			IsAnchor: true,
+			Color:    button.IsPrimary,
+			Size:     button.IsMedium,
+			Attributes: templ.Attributes{
+				"href": "/",
+			},
+		}) {
+			@icon.Icon() {
+				<i class="bx bxs-home"></i>
+			}
+			<span>Take Me Home</span>
+		}
+	}
+}

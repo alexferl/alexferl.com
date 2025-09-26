@@ -1,0 +1,86 @@
+package components
+
+import (
+	"github.com/alexferl/templaui/components/navbar"
+	"github.com/alexferl/templaui/elements/anchor"
+	"github.com/alexferl/templaui/elements/button"
+	"github.com/alexferl/templaui/elements/icon"
+	"github.com/alexferl/templaui/elements/title"
+	"github.com/alexferl/templaui/helpers"
+	"github.com/alexferl/templaui/layout/container"
+)
+
+templ NavigationBar() {
+	@navbar.Navbar(navbar.NavbarProps{
+		Color: navbar.IsPrimary,
+		Class: []string{string(helpers.IsPrimary)},
+	}) {
+		@container.Container(container.ContainerProps{
+			Responsive: container.IsMaxDesktop,
+		}) {
+			@navbar.NavbarBrand() {
+				@navbar.NavbarItem() {
+					@title.Title(title.TitleProps{
+						Size:  title.Is5,
+						Class: []string{string(helpers.HasTextWhite)},
+					}) {
+						@anchor.Anchor(anchor.AnchorProps{Href: "/", TextColor: anchor.HasTextWhite}) {
+							Alexandre Ferland
+						}
+					}
+				}
+			}
+			@navbar.NavbarMenu() {
+				@navbar.NavbarEnd() {
+					@navbar.NavbarItem() {
+						@SocialButtons()
+					}
+				}
+			}
+		}
+	}
+}
+
+templ SocialButtons() {
+	@button.Buttons() {
+		@button.Button(button.ButtonProps{
+			IsAnchor:   true,
+			IsOutlined: true,
+			Color:      button.IsWhite,
+			Attributes: templ.Attributes{
+				"href":       "mailto:me@alexferl.com",
+				"target":     "_blank",
+				"aria-label": "Email Alexandre Ferland",
+			}}) {
+			@icon.Icon() {
+				<i class="bx bxs-envelope"></i>
+			}
+		}
+		@button.Button(button.ButtonProps{
+			IsAnchor:   true,
+			IsOutlined: true,
+			Color:      button.IsWhite,
+			Attributes: templ.Attributes{
+				"href":       "https://github.com/alexferl",
+				"target":     "_blank",
+				"aria-label": "Visit Alexandre Ferland's GitHub profile",
+			}}) {
+			@icon.Icon() {
+				<i class="bx bxl-github"></i>
+			}
+		}
+		@button.Button(button.ButtonProps{
+			IsAnchor:   true,
+			IsOutlined: true,
+			Color:      button.IsWhite,
+			Attributes: templ.Attributes{
+				"href":       "https://www.linkedin.com/in/alexferl",
+				"target":     "_blank",
+				"aria-label": "Visit Alexandre Ferland's LinkedIn profile",
+			}}) {
+			@icon.Icon() {
+				<i class="bx bxl-linkedin-square"></i>
+			}
+		}
+	}
+}

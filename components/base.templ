@@ -1,0 +1,19 @@
+package components
+
+import "github.com/alexferl/templaui"
+
+type PageProps struct {
+	Title       string
+	Description string
+}
+
+templ BasePage(props PageProps, content templ.Component) {
+	@templaui.Document(templaui.DocumentProps{
+		Title:       props.Title,
+		Description: props.Description,
+		NoFavicon:   true,
+	}, ExtraHeadElements()) {
+		@NavigationBar()
+		@content
+	}
+}
