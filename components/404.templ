@@ -30,7 +30,6 @@ templ NotFoundContent() {
 					Class: []string{string(helpers.IsShadowless)},
 				}) {
 					@content.Content() {
-						// Apply styling directly to the <i> element
 						<i
 							class={ "bx", "bx-error", string(helpers.HasTextWarning) }
 							style="font-size: 4rem; margin-bottom: 1rem;"
