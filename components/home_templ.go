@@ -608,7 +608,7 @@ func ProjectsSection() templ.Component {
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = ProjectCard("tinysyslog", "A tiny and simple syslog server with log rotation written in Go.", "https://github.com/alexferl/tinysyslog").Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = ProjectCard("templaui", "A Go library providing Bulma CSS components for the templ templating language", "https://github.com/alexferl/templaui").Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -616,7 +616,7 @@ func ProjectsSection() templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = ProjectCard("vyper", "Python configuration with (more) fangs.", "https://github.com/alexferl/vyper").Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = ProjectCard("tinysyslog", "A tiny and simple syslog server with log rotation written in Go.", "https://github.com/alexferl/tinysyslog").Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
