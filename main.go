@@ -5,7 +5,6 @@ import (
 	"crypto/tls"
 	"embed"
 	"flag"
-	"io"
 	"log"
 	"net/http"
 
@@ -106,18 +105,6 @@ func main() {
 			})
 		})
 	}
-
-	// Drain request body to prevent HTTP/2 errors
-	app.Use(func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			next.ServeHTTP(w, r)
-			// Drain and close body to prevent "http2: request body closed due to handler exiting"
-			if r.Body != nil {
-				_, _ = io.Copy(io.Discard, r.Body)
-				r.Body.Close()
-			}
-		})
-	})
 
 	app.Use(middleware.Compress())
 
