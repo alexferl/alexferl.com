@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
 	"embed"
 	"flag"
 	"log"
@@ -10,6 +11,7 @@ import (
 	zh "github.com/alexferl/zerohttp"
 	"github.com/alexferl/zerohttp/config"
 	"github.com/alexferl/zerohttp/middleware"
+	"github.com/quic-go/quic-go/http3"
 	"golang.org/x/crypto/acme/autocert"
 
 	"alexferlcom/components"
@@ -20,6 +22,30 @@ var staticFiles embed.FS
 
 var csp = "default-src 'self'; script-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; frame-ancestors 'self'; form-action 'self';"
 var hosts = []string{"alexferl.com", "www.alexferl.com"}
+
+type http3AutocertServer struct {
+	server *http3.Server
+}
+
+func (h *http3AutocertServer) ListenAndServeTLS(certFile, keyFile string) error {
+	return h.server.ListenAndServeTLS(certFile, keyFile)
+}
+
+func (h *http3AutocertServer) Shutdown(ctx context.Context) error {
+	return h.server.Shutdown(ctx)
+}
+
+func (h *http3AutocertServer) Close() error {
+	return h.server.Close()
+}
+
+func (h *http3AutocertServer) ListenAndServeTLSWithAutocert(manager config.AutocertManager) error {
+	if h.server.TLSConfig == nil {
+		h.server.TLSConfig = &tls.Config{}
+	}
+	h.server.TLSConfig.GetCertificate = manager.GetCertificate
+	return h.server.ListenAndServeTLS("", "")
+}
 
 func main() {
 	local := flag.Bool("local", false, "run locally without TLS on :8080")
@@ -53,6 +79,14 @@ func main() {
 				),
 			),
 		)
+
+		h3Server := &http3AutocertServer{
+			server: &http3.Server{
+				Addr:    ":443",
+				Handler: app,
+			},
+		}
+		app.SetHTTP3Server(h3Server)
 	}
 
 	app.Use(middleware.Compress())
@@ -69,7 +103,7 @@ func main() {
 
 	if *local {
 		log.Fatal(app.Start())
-	} else {
-		log.Fatal(app.StartAutoTLS())
 	}
+
+	log.Fatal(app.StartAutoTLS())
 }
