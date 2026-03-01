@@ -80,13 +80,14 @@ func main() {
 			),
 		)
 
-		h3Server := &http3AutocertServer{
-			server: &http3.Server{
-				Addr:    ":443",
-				Handler: app,
-			},
-		}
-		app.SetHTTP3Server(h3Server)
+		// HTTP/3 disabled for now - needs custom quic-go listener setup
+		// h3Server := &http3AutocertServer{
+		// 	server: &http3.Server{
+		// 		Addr:    ":443",
+		// 		Handler: app,
+		// 	},
+		// }
+		// app.SetHTTP3Server(h3Server)
 	}
 
 	app.Use(middleware.Compress())
