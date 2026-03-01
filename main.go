@@ -42,7 +42,7 @@ func (h *http3AutocertServer) Close() error {
 func (h *http3AutocertServer) ListenAndServeTLSWithAutocert(manager config.AutocertManager) error {
 	tlsConfig := &tls.Config{
 		GetCertificate: manager.GetCertificate,
-		NextProtos:     []string{"h3", "h3-29", "h3-28", "h3-27"},
+		NextProtos:     []string{"h3"},
 	}
 	h.server.TLSConfig = tlsConfig
 
@@ -98,7 +98,7 @@ func main() {
 	if !*local {
 		app.Use(func(next http.Handler) http.Handler {
 			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				w.Header().Add("Alt-Svc", `h3=":443"; ma=2592000`)
+				w.Header().Add("Alt-Svc", `h3=":443"; ma=86400`)
 				next.ServeHTTP(w, r)
 			})
 		})
