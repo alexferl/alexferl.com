@@ -36,15 +36,17 @@ func (h *http3AutocertServer) Shutdown(ctx context.Context) error {
 }
 
 func (h *http3AutocertServer) Close() error {
-	return h.server.Close()
+	return nil
 }
 
 func (h *http3AutocertServer) ListenAndServeTLSWithAutocert(manager config.AutocertManager) error {
-	if h.server.TLSConfig == nil {
-		h.server.TLSConfig = &tls.Config{}
+	tlsConfig := &tls.Config{
+		GetCertificate: manager.GetCertificate,
+		NextProtos:     []string{"h3", "h3-29", "h3-28", "h3-27", "http/1.1"},
 	}
-	h.server.TLSConfig.GetCertificate = manager.GetCertificate
-	return h.server.ListenAndServeTLS("", "")
+	h.server.TLSConfig = tlsConfig
+
+	return h.server.ListenAndServe()
 }
 
 func main() {
@@ -80,14 +82,13 @@ func main() {
 			),
 		)
 
-		// HTTP/3 disabled for now - needs custom quic-go listener setup
-		// h3Server := &http3AutocertServer{
-		// 	server: &http3.Server{
-		// 		Addr:    ":443",
-		// 		Handler: app,
-		// 	},
-		// }
-		// app.SetHTTP3Server(h3Server)
+		h3Server := &http3AutocertServer{
+			server: &http3.Server{
+				Addr:    ":443",
+				Handler: app,
+			},
+		}
+		app.SetHTTP3Server(h3Server)
 	}
 
 	app.Use(middleware.Compress())
