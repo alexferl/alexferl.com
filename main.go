@@ -55,6 +55,7 @@ func (h *http3AutocertServer) ListenAndServeTLSWithAutocert(manager config.Autoc
 
 func main() {
 	local := flag.Bool("local", false, "run locally without TLS on :8080")
+	localTLS := flag.Bool("local-tls", false, "run locally with TLS on :8443 (requires cert.pem and key.pem)")
 	flag.Parse()
 
 	manager := &autocert.Manager{
@@ -72,6 +73,29 @@ func main() {
 				config.WithSecurityHeadersCSP(csp),
 			),
 		)
+	} else if *localTLS {
+		app = zh.New(
+			config.WithAddr("localhost:8080"),
+			config.WithTLSAddr("localhost:8443"),
+			config.WithCertFile("cert.pem"),
+			config.WithKeyFile("key.pem"),
+			config.WithSecurityHeadersOptions(
+				config.WithSecurityHeadersCSP(csp),
+			),
+		)
+
+		h3Server := &http3.Server{
+			Addr:    ":8443",
+			Handler: app,
+		}
+		app.SetHTTP3Server(h3Server)
+
+		app.Use(func(next http.Handler) http.Handler {
+			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.Header().Add("Alt-Svc", `h3=":8443"; ma=86400`)
+				next.ServeHTTP(w, r)
+			})
+		})
 	} else {
 		app = zh.New(
 			config.WithAddr(":80"),
@@ -95,7 +119,7 @@ func main() {
 		app.SetHTTP3Server(h3Server)
 	}
 
-	if !*local {
+	if !*local && !*localTLS {
 		app.Use(func(next http.Handler) http.Handler {
 			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				w.Header().Add("Alt-Svc", `h3=":443"; ma=86400`)
@@ -119,6 +143,10 @@ func main() {
 
 	if *local {
 		log.Fatal(app.Start())
+	} else if *localTLS {
+		log.Println("Starting local TLS server on https://localhost:8443")
+		log.Println("Generate certs with: openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -nodes -subj \"/CN=localhost\"")
+		log.Fatal(app.StartTLS("cert.pem", "key.pem"))
 	}
 
 	log.Fatal(app.StartAutoTLS())
