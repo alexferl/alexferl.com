@@ -19,7 +19,7 @@ help:
 	@echo "make update-deps"
 	@echo "	update dependencies"
 
-GOLANGCI_LINT := go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.9.0
+GOLANGCI_LINT := go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.10.1
 
 check-pre-commit:
 ifeq (, $(shell which pre-commit))

@@ -10,6 +10,7 @@ import (
 	zh "github.com/alexferl/zerohttp"
 	"github.com/alexferl/zerohttp/config"
 	"github.com/alexferl/zerohttp/middleware"
+	"golang.org/x/crypto/acme/autocert"
 
 	"alexferlcom/components"
 )
@@ -24,7 +25,11 @@ func main() {
 	local := flag.Bool("local", false, "run locally without TLS on :8080")
 	flag.Parse()
 
-	manager := zh.NewAutocertManager("/var/cache/certs", hosts...)
+	manager := &autocert.Manager{
+		Cache:      autocert.DirCache("/var/cache/certs"),
+		Prompt:     autocert.AcceptTOS,
+		HostPolicy: autocert.HostWhitelist(hosts...),
+	}
 
 	var app *zh.Server
 
@@ -65,6 +70,6 @@ func main() {
 	if *local {
 		log.Fatal(app.Start())
 	} else {
-		log.Fatal(app.StartAutoTLS(hosts...))
+		log.Fatal(app.StartAutoTLS())
 	}
 }
