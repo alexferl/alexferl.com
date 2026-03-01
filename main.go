@@ -91,6 +91,15 @@ func main() {
 		app.SetHTTP3Server(h3Server)
 	}
 
+	if !*local {
+		app.Use(func(next http.Handler) http.Handler {
+			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.Header().Add("Alt-Svc", `h3=":443"; ma=2592000`)
+				next.ServeHTTP(w, r)
+			})
+		})
+	}
+
 	app.Use(middleware.Compress())
 
 	app.Files("/public/", staticFiles, "public")
