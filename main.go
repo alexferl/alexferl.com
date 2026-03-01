@@ -40,14 +40,12 @@ func (h *http3AutocertServer) Close() error {
 }
 
 func (h *http3AutocertServer) ListenAndServeTLSWithAutocert(manager config.AutocertManager) error {
-	log.Println("[DEBUG] HTTP/3: Setting up TLS config")
 	tlsConfig := &tls.Config{
 		GetCertificate: manager.GetCertificate,
 		NextProtos:     []string{"h3", "h3-29", "h3-28", "h3-27"},
 	}
 	h.server.TLSConfig = tlsConfig
 
-	log.Printf("[DEBUG] HTTP/3: Starting server on %s", h.server.Addr)
 	err := h.server.ListenAndServe()
 	if err != nil {
 		log.Printf("[ERROR] HTTP/3 server failed: %v", err)
