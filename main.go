@@ -55,7 +55,7 @@ func (h *http3AutocertServer) ListenAndServeTLSWithAutocert(manager config.Autoc
 
 func main() {
 	local := flag.Bool("local", false, "run locally without TLS on :8080")
-	localTLS := flag.Bool("local-tls", false, "run locally with TLS on :8443 (requires cert.pem and key.pem)")
+	localTLS := flag.Bool("local-tls", false, "run locally with TLS on :8443 (requires localhost+2.pem and localhost+2-key.pem)")
 	flag.Parse()
 
 	manager := &autocert.Manager{
@@ -77,8 +77,8 @@ func main() {
 		app = zh.New(
 			config.WithAddr("localhost:8080"),
 			config.WithTLSAddr("localhost:8443"),
-			config.WithCertFile("cert.pem"),
-			config.WithKeyFile("key.pem"),
+			config.WithCertFile("localhost+2.pem"),
+			config.WithKeyFile("localhost+2-key.pem"),
 			config.WithSecurityHeadersOptions(
 				config.WithSecurityHeadersCSP(csp),
 			),
@@ -145,8 +145,7 @@ func main() {
 		log.Fatal(app.Start())
 	} else if *localTLS {
 		log.Println("Starting local TLS server on https://localhost:8443")
-		log.Println("Generate certs with: openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -nodes -subj \"/CN=localhost\"")
-		log.Fatal(app.StartTLS("cert.pem", "key.pem"))
+		log.Fatal(app.StartTLS("localhost+2.pem", "localhost+2-key.pem"))
 	}
 
 	log.Fatal(app.StartAutoTLS())
