@@ -23,6 +23,14 @@ var staticFiles embed.FS
 var csp = "default-src 'self'; script-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; frame-ancestors 'self'; form-action 'self';"
 var hosts = []string{"alexferl.com", "www.alexferl.com"}
 
+type autocertManager struct {
+	*autocert.Manager
+}
+
+func (a *autocertManager) Hostnames() []string {
+	return hosts
+}
+
 type http3AutocertServer struct {
 	server *http3.Server
 }
@@ -58,10 +66,12 @@ func main() {
 	localTLS := flag.Bool("local-tls", false, "run locally with TLS on :8443 (requires localhost+2.pem and localhost+2-key.pem)")
 	flag.Parse()
 
-	manager := &autocert.Manager{
-		Cache:      autocert.DirCache("/var/cache/certs"),
-		Prompt:     autocert.AcceptTOS,
-		HostPolicy: autocert.HostWhitelist(hosts...),
+	manager := &autocertManager{
+		Manager: &autocert.Manager{
+			Cache:      autocert.DirCache("/var/cache/certs"),
+			Prompt:     autocert.AcceptTOS,
+			HostPolicy: autocert.HostWhitelist(hosts...),
+		},
 	}
 
 	var app *zh.Server
