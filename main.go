@@ -138,7 +138,10 @@ func main() {
 		})
 	}
 
-	app.Use(middleware.Compress())
+	app.Use(
+		middleware.Compress(),
+		middleware.ETag(),
+	)
 
 	app.Files("/public/", staticFiles, "public")
 
