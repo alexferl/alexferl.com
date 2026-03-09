@@ -78,20 +78,24 @@ func main() {
 
 	if *local {
 		app = zh.New(
-			config.WithAddr("localhost:8080"),
-			config.WithSecurityHeadersOptions(
-				config.WithSecurityHeadersCSP(csp),
-			),
+			config.Config{
+				Addr: "localhost:8080",
+				SecurityHeaders: config.SecurityHeadersConfig{
+					ContentSecurityPolicy: csp,
+				},
+			},
 		)
 	} else if *localTLS {
 		app = zh.New(
-			config.WithAddr("localhost:8080"),
-			config.WithTLSAddr("localhost:8443"),
-			config.WithCertFile("localhost+2.pem"),
-			config.WithKeyFile("localhost+2-key.pem"),
-			config.WithSecurityHeadersOptions(
-				config.WithSecurityHeadersCSP(csp),
-			),
+			config.Config{
+				Addr:     "localhost:8080",
+				TLSAddr:  "localhost:8443",
+				CertFile: "localhost+2.pem",
+				KeyFile:  "localhost+2-key.pem",
+				SecurityHeaders: config.SecurityHeadersConfig{
+					ContentSecurityPolicy: csp,
+				},
+			},
 		)
 
 		h3Server := &http3.Server{
@@ -108,16 +112,18 @@ func main() {
 		})
 	} else {
 		app = zh.New(
-			config.WithAddr(":80"),
-			config.WithTLSAddr(":443"),
-			config.WithAutocertManager(manager),
-			config.WithSecurityHeadersOptions(
-				config.WithSecurityHeadersCSP(csp),
-				config.WithSecurityHeadersHSTS(
-					config.WithHSTSPreload(true),
-					config.WithHSTSMaxAge(31536000),
-				),
-			),
+			config.Config{
+				Addr:            ":80",
+				TLSAddr:         ":443",
+				AutocertManager: manager,
+				SecurityHeaders: config.SecurityHeadersConfig{
+					ContentSecurityPolicy: csp,
+					StrictTransportSecurity: config.StrictTransportSecurity{
+						MaxAge:         31536000,
+						PreloadEnabled: true,
+					},
+				},
+			},
 		)
 
 		h3Server := &http3AutocertServer{
