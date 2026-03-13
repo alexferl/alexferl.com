@@ -45,6 +45,9 @@ pre-commit: check-pre-commit
 run:
 	go run . -local=true
 
+run-tls:
+	go run . -local-tls=true
+
 tidy:
 	go mod tidy -v
 
