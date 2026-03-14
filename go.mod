@@ -5,7 +5,7 @@ go 1.26.0
 require (
 	github.com/a-h/templ v0.3.1001
 	github.com/alexferl/templaui v0.2.0
-	github.com/alexferl/zerohttp v0.34.0
+	github.com/alexferl/zerohttp v0.35.0
 	github.com/quic-go/quic-go v0.59.0
 	golang.org/x/crypto v0.48.0
 )

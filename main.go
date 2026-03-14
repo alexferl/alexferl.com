@@ -88,10 +88,12 @@ func main() {
 	} else if *localTLS {
 		app = zh.New(
 			config.Config{
-				Addr:     "localhost:8080",
-				TLSAddr:  "localhost:8443",
-				CertFile: "localhost+2.pem",
-				KeyFile:  "localhost+2-key.pem",
+				Addr: "localhost:8080",
+				TLS: config.TLSConfig{
+					Addr:     "localhost:8443",
+					CertFile: "localhost+2.pem",
+					KeyFile:  "localhost+2-key.pem",
+				},
 				SecurityHeaders: config.SecurityHeadersConfig{
 					ContentSecurityPolicy: csp,
 				},
@@ -113,9 +115,13 @@ func main() {
 	} else {
 		app = zh.New(
 			config.Config{
-				Addr:            ":80",
-				TLSAddr:         ":443",
-				AutocertManager: manager,
+				Addr: ":80",
+				TLS: config.TLSConfig{
+					Addr: ":443",
+				},
+				Extensions: config.ExtensionsConfig{
+					AutocertManager: manager,
+				},
 				SecurityHeaders: config.SecurityHeadersConfig{
 					ContentSecurityPolicy: csp,
 					StrictTransportSecurity: config.StrictTransportSecurity{
