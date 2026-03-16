@@ -10,6 +10,7 @@ import (
 
 	zh "github.com/alexferl/zerohttp"
 	"github.com/alexferl/zerohttp/config"
+	"github.com/alexferl/zerohttp/httpx"
 	"github.com/alexferl/zerohttp/middleware"
 	"github.com/quic-go/quic-go/http3"
 	"golang.org/x/crypto/acme/autocert"
@@ -108,7 +109,7 @@ func main() {
 
 		app.Use(func(next http.Handler) http.Handler {
 			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				w.Header().Add("Alt-Svc", `h3=":8443"; ma=86400`)
+				w.Header().Add(httpx.HeaderAltSvc, `h3=":8443"; ma=86400`)
 				next.ServeHTTP(w, r)
 			})
 		})
@@ -144,7 +145,7 @@ func main() {
 	if !*local && !*localTLS {
 		app.Use(func(next http.Handler) http.Handler {
 			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				w.Header().Add("Alt-Svc", `h3=":443"; ma=86400`)
+				w.Header().Add(httpx.HeaderAltSvc, `h3=":443"; ma=86400`)
 				next.ServeHTTP(w, r)
 			})
 		})
@@ -158,7 +159,7 @@ func main() {
 	app.Files("/public/", staticFiles, "public")
 
 	app.GET("/", zh.HandlerFunc(func(w http.ResponseWriter, r *http.Request) error {
-		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		w.Header().Set(httpx.HeaderContentType, httpx.MIMETextHTMLCharset)
 		return components.HomePage().Render(context.Background(), w)
 	}))
 
