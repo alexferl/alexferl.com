@@ -6,17 +6,14 @@ import (
 	"flag"
 	"log"
 	"net/http"
-	"os"
 
 	zh "github.com/alexferl/zerohttp"
-	zclog "github.com/alexferl/zerohttp-contrib/adapters/zerolog"
 	zcautocert "github.com/alexferl/zerohttp-contrib/extensions/autocert"
 	"github.com/alexferl/zerohttp-contrib/extensions/http3"
 	"github.com/alexferl/zerohttp-contrib/middleware/compress"
 	"github.com/alexferl/zerohttp/config"
 	"github.com/alexferl/zerohttp/httpx"
 	"github.com/alexferl/zerohttp/middleware"
-	"github.com/rs/zerolog"
 	"golang.org/x/crypto/acme/autocert"
 
 	"alexferlcom/components"
@@ -33,15 +30,6 @@ func main() {
 	localTLS := flag.Bool("local-tls", false, "run locally with TLS on :8443 (requires localhost+2.pem and localhost+2-key.pem)")
 	flag.Parse()
 
-	zl := zerolog.New(zerolog.ConsoleWriter{Out: os.Stdout}).
-		Level(zerolog.InfoLevel).
-		With().
-		Timestamp().
-		Caller().
-		Logger()
-
-	logger := zclog.New(zl)
-
 	mgr := zcautocert.New(
 		autocert.DirCache("/var/cache/certs"),
 		hosts,
@@ -56,7 +44,6 @@ func main() {
 				SecurityHeaders: config.SecurityHeadersConfig{
 					ContentSecurityPolicy: csp,
 				},
-				Logger: logger,
 			},
 		)
 	} else if *localTLS {
@@ -71,7 +58,6 @@ func main() {
 				SecurityHeaders: config.SecurityHeadersConfig{
 					ContentSecurityPolicy: csp,
 				},
-				Logger: logger,
 			},
 		)
 
@@ -101,7 +87,6 @@ func main() {
 						PreloadEnabled: true,
 					},
 				},
-				Logger: logger,
 			},
 		)
 
