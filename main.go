@@ -2,17 +2,21 @@ package main
 
 import (
 	"context"
-	"crypto/tls"
 	"embed"
 	"flag"
 	"log"
 	"net/http"
+	"os"
 
 	zh "github.com/alexferl/zerohttp"
+	zclog "github.com/alexferl/zerohttp-contrib/adapters/zerolog"
+	zcautocert "github.com/alexferl/zerohttp-contrib/extensions/autocert"
+	"github.com/alexferl/zerohttp-contrib/extensions/http3"
+	"github.com/alexferl/zerohttp-contrib/middleware/compress"
 	"github.com/alexferl/zerohttp/config"
 	"github.com/alexferl/zerohttp/httpx"
 	"github.com/alexferl/zerohttp/middleware"
-	"github.com/quic-go/quic-go/http3"
+	"github.com/rs/zerolog"
 	"golang.org/x/crypto/acme/autocert"
 
 	"alexferlcom/components"
@@ -24,56 +28,24 @@ var staticFiles embed.FS
 var csp = "default-src 'self'; script-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; frame-ancestors 'self'; form-action 'self';"
 var hosts = []string{"alexferl.com", "www.alexferl.com"}
 
-type autocertManager struct {
-	*autocert.Manager
-}
-
-func (a *autocertManager) Hostnames() []string {
-	return hosts
-}
-
-type http3AutocertServer struct {
-	server *http3.Server
-}
-
-func (h *http3AutocertServer) ListenAndServeTLS(certFile, keyFile string) error {
-	return h.server.ListenAndServeTLS(certFile, keyFile)
-}
-
-func (h *http3AutocertServer) Shutdown(ctx context.Context) error {
-	return h.server.Shutdown(ctx)
-}
-
-func (h *http3AutocertServer) Close() error {
-	return nil
-}
-
-func (h *http3AutocertServer) ListenAndServeTLSWithAutocert(manager config.AutocertManager) error {
-	tlsConfig := &tls.Config{
-		GetCertificate: manager.GetCertificate,
-		NextProtos:     []string{"h3"},
-	}
-	h.server.TLSConfig = tlsConfig
-
-	err := h.server.ListenAndServe()
-	if err != nil {
-		log.Printf("[ERROR] HTTP/3 server failed: %v", err)
-	}
-	return err
-}
-
 func main() {
 	local := flag.Bool("local", false, "run locally without TLS on :8080")
 	localTLS := flag.Bool("local-tls", false, "run locally with TLS on :8443 (requires localhost+2.pem and localhost+2-key.pem)")
 	flag.Parse()
 
-	manager := &autocertManager{
-		Manager: &autocert.Manager{
-			Cache:      autocert.DirCache("/var/cache/certs"),
-			Prompt:     autocert.AcceptTOS,
-			HostPolicy: autocert.HostWhitelist(hosts...),
-		},
-	}
+	zl := zerolog.New(zerolog.ConsoleWriter{Out: os.Stdout}).
+		Level(zerolog.InfoLevel).
+		With().
+		Timestamp().
+		Caller().
+		Logger()
+
+	logger := zclog.New(zl)
+
+	mgr := zcautocert.New(
+		autocert.DirCache("/var/cache/certs"),
+		hosts,
+	)
 
 	var app *zh.Server
 
@@ -84,6 +56,7 @@ func main() {
 				SecurityHeaders: config.SecurityHeadersConfig{
 					ContentSecurityPolicy: csp,
 				},
+				Logger: logger,
 			},
 		)
 	} else if *localTLS {
@@ -98,13 +71,11 @@ func main() {
 				SecurityHeaders: config.SecurityHeadersConfig{
 					ContentSecurityPolicy: csp,
 				},
+				Logger: logger,
 			},
 		)
 
-		h3Server := &http3.Server{
-			Addr:    ":8443",
-			Handler: app,
-		}
+		h3Server := http3.New(":8443", app)
 		app.SetHTTP3Server(h3Server)
 
 		app.Use(func(next http.Handler) http.Handler {
@@ -121,7 +92,7 @@ func main() {
 					Addr: ":443",
 				},
 				Extensions: config.ExtensionsConfig{
-					AutocertManager: manager,
+					AutocertManager: mgr,
 				},
 				SecurityHeaders: config.SecurityHeadersConfig{
 					ContentSecurityPolicy: csp,
@@ -130,15 +101,11 @@ func main() {
 						PreloadEnabled: true,
 					},
 				},
+				Logger: logger,
 			},
 		)
 
-		h3Server := &http3AutocertServer{
-			server: &http3.Server{
-				Addr:    ":443",
-				Handler: app,
-			},
-		}
+		h3Server := http3.NewWithAutocert(":443", app, mgr)
 		app.SetHTTP3Server(h3Server)
 	}
 
@@ -152,7 +119,18 @@ func main() {
 	}
 
 	app.Use(
-		middleware.Compress(),
+		middleware.Compress(config.CompressConfig{
+			Algorithms: []config.CompressionAlgorithm{
+				"br",
+				"zstd",
+				config.Gzip,
+				config.Deflate,
+			},
+			Providers: []config.CompressionProvider{
+				compress.BrotliProvider{},
+				compress.ZstdProvider{},
+			},
+		}),
 		middleware.ETag(),
 	)
 
@@ -170,7 +148,6 @@ func main() {
 	if *local {
 		log.Fatal(app.Start())
 	} else if *localTLS {
-		log.Println("Starting local TLS server on https://localhost:8443")
 		log.Fatal(app.StartTLS("localhost+2.pem", "localhost+2-key.pem"))
 	}
 
