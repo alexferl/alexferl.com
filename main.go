@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"embed"
 	"flag"
 	"log"
@@ -123,12 +122,13 @@ func main() {
 
 	app.GET("/", zh.HandlerFunc(func(w http.ResponseWriter, r *http.Request) error {
 		w.Header().Set(httpx.HeaderContentType, httpx.MIMETextHTMLCharset)
-		return components.HomePage().Render(context.Background(), w)
+		return components.HomePage().Render(r.Context(), w)
 	}))
 
 	app.NotFound(zh.HandlerFunc(func(w http.ResponseWriter, r *http.Request) error {
+		w.Header().Set(httpx.HeaderContentType, httpx.MIMETextHTMLCharset)
 		w.WriteHeader(http.StatusNotFound)
-		return components.NotFoundPage().Render(context.Background(), w)
+		return components.NotFoundPage().Render(r.Context(), w)
 	}))
 
 	if *local {
