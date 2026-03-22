@@ -127,6 +127,7 @@ func main() {
 	}))
 
 	app.NotFound(zh.HandlerFunc(func(w http.ResponseWriter, r *http.Request) error {
+		w.WriteHeader(http.StatusNotFound)
 		return components.NotFoundPage().Render(context.Background(), w)
 	}))
 
