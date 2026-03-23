@@ -8,11 +8,12 @@ import (
 
 	zh "github.com/alexferl/zerohttp"
 	zcautocert "github.com/alexferl/zerohttp-contrib/extensions/autocert"
-	"github.com/alexferl/zerohttp-contrib/extensions/http3"
-	"github.com/alexferl/zerohttp-contrib/middleware/compress"
-	"github.com/alexferl/zerohttp/config"
+	zchttp3 "github.com/alexferl/zerohttp-contrib/extensions/http3"
+	zccompress "github.com/alexferl/zerohttp-contrib/middleware/compress"
 	"github.com/alexferl/zerohttp/httpx"
-	"github.com/alexferl/zerohttp/middleware"
+	"github.com/alexferl/zerohttp/middleware/compress"
+	"github.com/alexferl/zerohttp/middleware/etag"
+	"github.com/alexferl/zerohttp/middleware/securityheaders"
 	"golang.org/x/crypto/acme/autocert"
 
 	"alexferlcom/components"
@@ -38,29 +39,29 @@ func main() {
 
 	if *local {
 		app = zh.New(
-			config.Config{
+			zh.Config{
 				Addr: "localhost:8080",
-				SecurityHeaders: config.SecurityHeadersConfig{
+				SecurityHeaders: securityheaders.Config{
 					ContentSecurityPolicy: csp,
 				},
 			},
 		)
 	} else if *localTLS {
 		app = zh.New(
-			config.Config{
+			zh.Config{
 				Addr: "localhost:8080",
-				TLS: config.TLSConfig{
+				TLS: zh.TLSConfig{
 					Addr:     "localhost:8443",
 					CertFile: "localhost+2.pem",
 					KeyFile:  "localhost+2-key.pem",
 				},
-				SecurityHeaders: config.SecurityHeadersConfig{
+				SecurityHeaders: securityheaders.Config{
 					ContentSecurityPolicy: csp,
 				},
 			},
 		)
 
-		h3Server := http3.New(":8443", app)
+		h3Server := zchttp3.New(":8443", app)
 		app.SetHTTP3Server(h3Server)
 
 		app.Use(func(next http.Handler) http.Handler {
@@ -71,17 +72,17 @@ func main() {
 		})
 	} else {
 		app = zh.New(
-			config.Config{
+			zh.Config{
 				Addr: ":80",
-				TLS: config.TLSConfig{
+				TLS: zh.TLSConfig{
 					Addr: ":443",
 				},
-				Extensions: config.ExtensionsConfig{
+				Extensions: zh.ExtensionsConfig{
 					AutocertManager: mgr,
 				},
-				SecurityHeaders: config.SecurityHeadersConfig{
+				SecurityHeaders: securityheaders.Config{
 					ContentSecurityPolicy: csp,
-					StrictTransportSecurity: config.StrictTransportSecurity{
+					StrictTransportSecurity: securityheaders.StrictTransportSecurity{
 						MaxAge:         31536000,
 						PreloadEnabled: true,
 					},
@@ -89,7 +90,7 @@ func main() {
 			},
 		)
 
-		h3Server := http3.NewWithAutocert(":443", app, mgr)
+		h3Server := zchttp3.NewWithAutocert(":443", app, mgr)
 		app.SetHTTP3Server(h3Server)
 	}
 
@@ -103,19 +104,19 @@ func main() {
 	}
 
 	app.Use(
-		middleware.Compress(config.CompressConfig{
-			Algorithms: []config.CompressionAlgorithm{
+		compress.New(compress.Config{
+			Algorithms: []compress.Algorithm{
 				"br",
 				"zstd",
-				config.Gzip,
-				config.Deflate,
+				compress.Gzip,
+				compress.Deflate,
 			},
-			Providers: []config.CompressionProvider{
-				compress.BrotliProvider{},
-				compress.ZstdProvider{},
+			Providers: []compress.Provider{
+				zccompress.BrotliProvider{},
+				zccompress.ZstdProvider{},
 			},
 		}),
-		middleware.ETag(),
+		etag.New(),
 	)
 
 	app.Files("/public/", staticFiles, "public")
