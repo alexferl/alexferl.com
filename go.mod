@@ -5,7 +5,7 @@ go 1.26.0
 require (
 	github.com/a-h/templ v0.3.1001
 	github.com/alexferl/templaui v0.2.0
-	github.com/alexferl/zerohttp v0.61.0
+	github.com/alexferl/zerohttp v0.75.0
 	github.com/alexferl/zerohttp-contrib/extensions/autocert v0.2.0
 	github.com/alexferl/zerohttp-contrib/extensions/http3 v0.2.0
 	github.com/alexferl/zerohttp-contrib/middleware/compress v0.3.0
@@ -14,7 +14,7 @@ require (
 
 require (
 	github.com/a-h/parse v0.0.0-20250122154542-74294addb73e // indirect
-	github.com/andybalholm/brotli v1.2.0 // indirect
+	github.com/andybalholm/brotli v1.2.1 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/cli/browser v1.3.0 // indirect
 	github.com/fatih/color v1.19.0 // indirect
