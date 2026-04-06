@@ -5,7 +5,7 @@ go 1.26.0
 require (
 	github.com/a-h/templ v0.3.1001
 	github.com/alexferl/templaui v0.2.0
-	github.com/alexferl/zerohttp v0.75.0
+	github.com/alexferl/zerohttp v0.85.0
 	github.com/alexferl/zerohttp-contrib/extensions/autocert v0.2.0
 	github.com/alexferl/zerohttp-contrib/extensions/http3 v0.2.0
 	github.com/alexferl/zerohttp-contrib/middleware/compress v0.3.0
